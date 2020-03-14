@@ -1,0 +1,26 @@
+<!-- .menu -->
+<ul class="menu" [ngClass]="{'menu--layout--classic': layout === 'classic', 'menu--layout--topbar': layout === 'topbar'}">
+    <li
+        *ngFor="let item of items"
+        class="menu__item"
+        [ngClass]="{
+            'menu__item--hover': item === hoveredItem
+        }"
+        (mouseenter)="onItemMouseEnter(item)"
+        (mouseleave)="onItemMouseLeave(item)"
+    >
+
+        <ng-template #link>
+            {{ item.label }}
+            <app-icon *ngIf="item.items" class="menu__arrow" name="arrow-rounded-right-6x9" size="6x9"></app-icon>
+        </ng-template>
+
+        <a *ngIf="!item.external" [routerLink]="item.url" [target]="item.target" (click)="itemClick.emit(item)"><ng-container [ngTemplateOutlet]="link"></ng-container></a>
+        <a *ngIf="item.external" [href]="item.url" [target]="item.target" (click)="itemClick.emit(item)"><ng-container [ngTemplateOutlet]="link"></ng-container></a>
+
+        <div *ngIf="item.items" class="menu__submenu">
+            <app-header-menu [items]="item.items" (itemClick)="onSubItemClick($event)"></app-header-menu>
+        </div>
+    </li>
+</ul>
+<!-- .menu / end -->
